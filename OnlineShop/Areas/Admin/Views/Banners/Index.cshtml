@@ -43,7 +43,8 @@
                 @Html.DisplayFor(modelItem => item.SubTitle)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ImageName)
+               @*  @Html.DisplayFor(modelItem => item.ImageName) *@
+                    <img class="img-thumbnail" src="/images/banners/@item.ImageName" style="max-width: 100px" />
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Priority)
