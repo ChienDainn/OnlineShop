@@ -69,7 +69,7 @@ namespace OnlineShop.Areas.Admin.Controllers
                     string fn = Directory.GetCurrentDirectory();
 
                     // Tạo đường dẫn đầy đủ đến nơi lưu ảnh
-                    string ImagePath = Path.Combine(fn + "\\wwwroot\\images\\banners\\" + banner.ImageName);
+                    string ImagePath = Path.Combine(fn + "\\wwwroot\\Images\\Banners\\" + banner.ImageName);
 
                     // Mở luồng để ghi file
                     using (var stream = new FileStream(ImagePath, FileMode.Create))

@@ -26,6 +26,7 @@
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Areas\Admin\Views\Models\" />
     <Folder Include="Models\Db\" />
+    <Folder Include="wwwroot\Images\Banners\" />
   </ItemGroup>
 
 </Project>
