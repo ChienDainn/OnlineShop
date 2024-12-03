@@ -25,13 +25,14 @@
             </div>
             <div class="form-group">
                 <label asp-for="ImageName" class="control-label"></label>
-                <input asp-for="ImageName" class="form-control" />
+                <input type="file" asp-for="ImageName" class="form-control" />
+                <img class="img-thumbnail" src="/Images/Banners/@Model.ImageName" />
                 <span asp-validation-for="ImageName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Priority" class="control-label"></label>
-              @*   <input asp-for="Priority" class="form-control" /> *@
-                <input type="file" asp-for="Priority" class="form-control" />
+               <input asp-for="Priority" class="form-control" />
+              
                 <span asp-validation-for="Priority" class="text-danger"></span>
             </div>
             <div class="form-group">
