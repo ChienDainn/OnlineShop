@@ -10,8 +10,11 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" enctype="multipart/form-data">
+
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input type="hidden" asp-for="ImageName" />
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
@@ -25,8 +28,8 @@
             </div>
             <div class="form-group">
                 <label asp-for="ImageName" class="control-label"></label>
-                <input type="file" asp-for="ImageName" class="form-control" />
-                <img class="img-thumbnail" src="/Images/Banners/@Model.ImageName" />
+                <input type="file" name="ImageFile" asp-for="ImageName" class="form-control" />
+                <img class="img-thumbnail" src="/images/banners/@Model.ImageName"/>
                 <span asp-validation-for="ImageName" class="text-danger"></span>
             </div>
             <div class="form-group">
