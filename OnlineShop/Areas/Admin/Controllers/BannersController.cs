@@ -133,6 +133,7 @@ namespace OnlineShop.Areas.Admin.Controllers
                         //---------------
                         string ImagePath;
                         ImagePath = Directory.GetCurrentDirectory() + "/wwwroot/images/banners/" + banner.ImageName;
+                        ImagePath = Directory.GetCurrentDirectory() + "/wwwroot/images/banners/" + banner.ImageName;
 
                         using (var stream = new FileStream(ImagePath, FileMode.Create))
                         {
@@ -185,6 +186,17 @@ namespace OnlineShop.Areas.Admin.Controllers
             var banner = await _context.Banners.FindAsync(id);
             if (banner != null)
             {
+                //======delete id========
+                //-----------------------
+                string org_fn;
+                org_fn = Directory.GetCurrentDirectory( )+ "wwwroot/images/banners/"+ banner.ImageName;
+
+                if (System.IO.File.Exists(org_fn))
+                {
+                    System.IO.File.Delete(org_fn);
+                }
+                //-----------------------
+
                 _context.Banners.Remove(banner);
             }
 
