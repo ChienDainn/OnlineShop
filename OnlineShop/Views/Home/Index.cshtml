@@ -1,5 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    var banners = ViewData["Banners"] as List<OnlineShop.Models.Db.Banner>;
 }
 
 <!--slider area start-->
@@ -13,6 +14,34 @@
             "speed": 300,
             "infinite": true
         }'>
+        @if (banners != null)
+        {
+            var sliders = banners
+            .Where(x => x.Position == "Slider")
+            .OrderBy(x => x.Priority)
+            .ToList();
+
+            foreach (var item in sliders)
+            {
+                <div class="single_slider d-flex align-items-center" data-bgimg="/images/banners/@item.ImageName">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-7">
+                                <div class="slider_text">
+                                    <span>Lookbook</span>
+                                    <h1>@item.Title</h1>
+                                    <p>@item.SubTitle</p>
+                                    <a class="btn btn-primary" href="@item.Link">Explore Now</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+
+
+        }
         <div class="single_slider d-flex align-items-center" data-bgimg="assets/img/slider/slider1.jpg">
             <div class="container">
                 <div class="row">
