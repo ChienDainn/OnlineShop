@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
@@ -24,7 +24,8 @@
             </div>
             <div class="form-group">
                 <label asp-for="FullDesc" class="control-label"></label>
-                <input asp-for="FullDesc" class="form-control" />
+                @* <input asp-for="FullDesc" class="form-control" /> *@
+                <textarea asp-for="FullDesc" class="form-control" rows="4"></textarea>
                 <span asp-validation-for="FullDesc" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -34,8 +35,13 @@
             </div>
             <div class="form-group">
                 <label asp-for="ImageName" class="control-label"></label>
-                <input asp-for="ImageName" class="form-control" />
+                <input asp-for="ImageName" type="file" name="MainImage" class="form-control" />
                 <span asp-validation-for="ImageName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label  class="control-label">Gallery</label>
+                <input asp-for="ImageName" type="file" name="GalleryImages" multiple class="form-control" />
+             
             </div>
             <div class="form-group">
                 <label asp-for="Qty" class="control-label"></label>
