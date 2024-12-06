@@ -139,26 +139,36 @@
 <section class="banner_section mb-109">
     <div class="container">
         <div class="section_title mb-60">
-            <h2>featured collections</h2>
+            <h2>Featured Collections</h2>
         </div>
         <div class="banner_container d-flex">
-            <figure class="single_banner position-relative mr-30">
-                <img src="assets/img/bg/bg1.jpg" alt="">
-                <figcaption class="banner_text position-absolute">
-                    <h3>Zara Pattern <br> backpacks</h3>
-                    <p>Stretch, fresh-cool help you alway <br> comfortable</p>
-                    <a class="btn btn-primary" href="shop.html">Shop Now</a>
-                </figcaption>
-            </figure>
-            <figure class="single_banner position-relative">
-                <img src="assets/img/bg/bg2.jpg" alt="">
-                <figcaption class="banner_text position-absolute">
-                    <h3 class="text-white">Basic Color Caps</h3>
-                    <p class="text-white">Minimalist never cool, choose and make <br> the simple great again!</p>
-                </figcaption>
-            </figure>
+            @if (banners != null)
+            {
+                var banner_list = banners
+                .Where(x => x.Position == "Banner1")
+                .OrderBy(x => x.Priority)
+                .ToList();
+
+                foreach (var item in banner_list)
+                {
+                    <figure class="single_banner position-relative mr-30">
+                        <img src="/images/banners/@item.ImageName" alt="" />
+                        <figcaption class="banner_text position-absolute">
+                            <h3>@item.Title</h3>
+                            <p>@item.SubTitle</p>
+                            @if (!string.IsNullOrEmpty(item.Link))
+                            {
+                                <a class="btn btn-primary" href="@item.Link">Shop Now</a>
+                            }
+                          
+                        </figcaption>
+                    </figure>
+                }
+            }
+
         </div>
     </div>
+
 </section>
 <!-- banner section end -->
 <!-- product section start -->
@@ -169,36 +179,7 @@
                 <h2>best selling items</h2>
             </div>
             <div class="product_tab_btn d-flex">
-                <ul class="nav" role="tablist">
-                    <li>
-                        <a class="active" data-toggle="tab" href="#all" role="tab" aria-controls="all"
-                           aria-selected="true">
-                            All
-                        </a>
-                    </li>
-                    <li>
-                        <a data-toggle="tab" href="#clothings" role="tab" aria-controls="clothings"
-                           aria-selected="false">
-                            Clothings
-                        </a>
-                    </li>
-                    <li>
-                        <a data-toggle="tab" href="#bags" role="tab" aria-controls="bags" aria-selected="false">
-                            Bags
-                        </a>
-                    </li>
-                    <li>
-                        <a data-toggle="tab" href="#shoes" role="tab" aria-controls="shoes" aria-selected="false">
-                            Shoes
-                        </a>
-                    </li>
-                    <li>
-                        <a data-toggle="tab" href="#accessories" role="tab" aria-controls="accessories"
-                           aria-selected="false">
-                            Accessories
-                        </a>
-                    </li>
-                </ul>
+               
                 <div class="all_product">
                     <a href="shop.html">All Product</a>
                 </div>
@@ -2232,34 +2213,30 @@
 <section class="banner_section banner_style2 mb-109">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-6">
-                <figure class="single_banner position-relative">
-                    <img src="assets/img/bg/bg3.jpg" alt="">
-                    <div class="banner_text position-absolute">
-                        <h3>Minimalist <br> sneaker</h3>
-                        <p>Stretch, fresh-cool help you alway <br> comfortable</p>
-                        <a class="btn btn-primary" href="shop.html">Shop Now</a>
+            @if (banners != null)
+            {
+                var banner2_list = banners.Where(x => x.Position == "Banner2").OrderBy(x => x.Priority).ToList();
+                foreach (var item in banner2_list)
+                {
+                    <div class="col-lg-6 col-md-6 col-sm-6">
+                        <figure class="single_banner position-relative">
+                            <img src="/images/banners/@item.ImageName" alt="@item.ImageName">
+                            <div class="banner_text position-absolute">
+                                <h3>@item.Title</h3>
+                                <p>@item.SubTitle</p>
+                                @if (!string.IsNullOrEmpty(item.Link))
+                                {
+                                    <a class="btn btn-primary" href="@item.Link">Shop Now</a>
+                                }
+                            </div>
+                        </figure>
                     </div>
-                    <div class="banner_tag">
-                        <span>new arrivals <br> women</span>
-                    </div>
-                </figure>
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-6">
-                <figure class="single_banner position-relative">
-                    <img src="assets/img/bg/bg4.jpg" alt="">
-                    <div class="banner_text position-absolute text__style2">
-                        <h3><span>50%</span> OFF <br> for Autumn</h3>
-                        <p>Stretch, fresh-cool help you alway <br> comfortable</p>
-                        <a class="btn btn-primary" href="shop.html">Shop Now</a>
-                    </div>
-                    <div class="banner_tag">
-                        <span>mega sale</span>
-                    </div>
-                </figure>
-            </div>
+                }
+            }
         </div>
+
     </div>
+
 </section>
 <!-- banner section end -->
 <!-- product section start -->
