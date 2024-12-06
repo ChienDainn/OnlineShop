@@ -25,13 +25,16 @@
                 @Html.DisplayNameFor(model => model.Price)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Discount)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.ImageName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Qty)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Tag)
+                @Html.DisplayNameFor(model => model.Tags)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.VideoUrl)
@@ -55,6 +58,9 @@
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
                 @* @Html.DisplayFor(modelItem => item.ImageName) *@
                 <img src="/images/banners/@item.ImageName" style="max-width:100px" />
             </td>
@@ -62,7 +68,7 @@
                 @Html.DisplayFor(modelItem => item.Qty)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Tag)
+                @Html.DisplayFor(modelItem => item.Tags)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.VideoUrl)

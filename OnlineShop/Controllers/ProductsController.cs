@@ -53,12 +53,41 @@ namespace OnlineShop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,FullDesc,Price,ImageName,Qty,Tag,VideoUrl")] Product product)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,FullDesc,Price,ImageName,Qty,Tag,VideoUrl")] Product product,IFormFile? MainImage, IFormFile[]? GalleryImages)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(product);
                 await _context.SaveChangesAsync();
+                // Nếu có hình ảnh trong GalleryImages
+                if (GalleryImages != null)
+                {
+                    // Duyệt qua từng hình ảnh trong GalleryImages
+                    foreach (var item in GalleryImages)
+                    {
+                        // Tạo một đối tượng mới để lưu thông tin về hình ảnh
+                        var newgallery = new ProductGalery();
+                        newgallery.ProductId = product.Id; // Gán ID sản phẩm
+
+                        // Tạo tên file hình ảnh mới, kết hợp GUID và phần mở rộng
+                        newgallery.ImageName = Guid.NewGuid().ToString() + System.IO.Path.GetExtension(item.FileName);
+
+                        // Lấy đường dẫn thư mục hiện tại
+                        string fn = Directory.GetCurrentDirectory();
+
+                        // Tạo đường dẫn đầy đủ để lưu hình ảnh
+                        string ImagePath = fn + "\\wwwroot\\images\\banners\\" + newgallery.ImageName;
+
+                        // Sử dụng FileStream để lưu hình ảnh vào đường dẫn đã tạo
+                        using (var stream = new FileStream(ImagePath, FileMode.Create))
+                        {
+                            item.CopyTo(stream); // Sao chép dữ liệu hình ảnh vào stream
+                        }
+
+                        // Thêm thông tin về hình ảnh mới vào cơ sở dữ liệu
+                        _context.ProductGaleries.Add(newgallery);
+                    }
+                }
                 return RedirectToAction(nameof(Index));
             }
             return View(product);

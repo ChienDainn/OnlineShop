@@ -55,7 +55,8 @@ namespace OnlineShop.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,FullDesc,Price,ImageName,Qty,Tag,VideoUrl")] Product product,IFormFile? MainImage)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,FullDesc,Price,ImageName,Qty,Tags,VideoUrl")] Product product,
+            IFormFile? MainImage, IFormFile[]? GalleryImages)
         {
             if (ModelState.IsValid)
             {
@@ -75,6 +76,28 @@ namespace OnlineShop.Areas.Admin.Controllers
                 }
                 _context.Add(product);
                 await _context.SaveChangesAsync();
+                // saving gallery images
+                if (GalleryImages != null)
+                {
+                    foreach (var item in GalleryImages)
+                    {
+                        var newgallery = new ProductGalery();
+                        newgallery.ProductId = product.Id;
+
+                        newgallery.ImageName = Guid.NewGuid().ToString() + System.IO.Path.GetExtension(item.FileName);
+                        string fn = Directory.GetCurrentDirectory();
+                        string ImagePath = Path.Combine(fn + "\\wwwroot\\images\\banners\\" + newgallery.ImageName);
+
+                        using (var stream = new FileStream(ImagePath, FileMode.Create))
+                        {
+                            item.CopyTo(stream);
+                        }
+
+                        _context.ProductGaleries.Add(newgallery);
+                    }
+
+                    await _context.SaveChangesAsync();
+                }
                 return RedirectToAction(nameof(Index));
             }
             return View(product);
@@ -101,7 +124,7 @@ namespace OnlineShop.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,FullDesc,Price,ImageName,Qty,Tag,VideoUrl")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,FullDesc,Price,ImageName,Qty,Tags,VideoUrl")] Product product)
         {
             if (id != product.Id)
             {

@@ -56,10 +56,11 @@ public partial class OnlineShopContext : DbContext
         modelBuilder.Entity<Product>(entity =>
         {
             entity.Property(e => e.Description).HasMaxLength(500);
+            entity.Property(e => e.Discount).HasColumnType("money");
             entity.Property(e => e.FullDesc).HasMaxLength(4000);
             entity.Property(e => e.ImageName).HasMaxLength(50);
             entity.Property(e => e.Price).HasColumnType("money");
-            entity.Property(e => e.Tag).HasMaxLength(1000);
+            entity.Property(e => e.Tags).HasMaxLength(1000);
             entity.Property(e => e.Title).HasMaxLength(200);
             entity.Property(e => e.VideoUrl).HasMaxLength(300);
         });
