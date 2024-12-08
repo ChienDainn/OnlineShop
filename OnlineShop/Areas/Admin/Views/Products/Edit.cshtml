@@ -9,10 +9,11 @@
 <h4>Product</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
+    <div class="col-md-12">
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="ImageName" />
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
                 <input asp-for="Title" class="form-control" />
@@ -20,7 +21,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
+                <textarea asp-for="Description" class="form-control" rows="4"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -40,7 +41,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="ImageName" class="control-label"></label>
-                <input type="file" asp-for="ImageName" class="form-control" />
+                <input type="file" name="MainImage" class="form-control" />
                 <img src="/images/banners/@Model.ImageName" class="img-thumbnail" style="max-width:200px" />
                 <span asp-validation-for="ImageName" class="text-danger"></span>
             </div>
@@ -58,8 +59,8 @@
                         {
                             <div class="col-md-3 col-12" id="@item.Id">
                                 <img src="/images/banners/@item.ImageName" class="img-thumbnail" />
-                                <a class="btn btn-danger w-100" href="">
-                                    delete
+                                <a class="btn btn-danger w-100" href="/admin/products/DeleteGallery?id=@item.Id">
+                                    Delete
                                 </a>
                             </div>
                         }

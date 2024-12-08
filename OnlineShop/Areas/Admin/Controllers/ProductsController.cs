@@ -55,7 +55,7 @@ namespace OnlineShop.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,FullDesc,Price,ImageName,Qty,Tags,VideoUrl")] Product product,
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,FullDesc,Price,Discount,ImageName,Qty,Tags,VideoUrl")] Product product,
             IFormFile? MainImage, IFormFile[]? GalleryImages)
         {
             if (ModelState.IsValid)
@@ -127,7 +127,8 @@ namespace OnlineShop.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,FullDesc,Price,ImageName,Qty,Tags,VideoUrl")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,FullDesc,Price,Discount,ImageName,Qty,Tags,VideoUrl")] Product product, 
+            IFormFile? MainImage, IFormFile[]? GalleryImages)
         {
             if (id != product.Id)
             {
@@ -138,6 +139,44 @@ namespace OnlineShop.Areas.Admin.Controllers
             {
                 try
                 {
+                    // Save main image
+                    if (MainImage != null)
+                    {
+                        string d = Directory.GetCurrentDirectory();
+                        string fn = d + "\\wwwroot\\images\\banners\\" + product.ImageName;
+
+                        // Delete existing file if it exists
+                        if (System.IO.File.Exists(fn))
+                        {
+                            System.IO.File.Delete(fn);
+                        }
+
+                        // Create a new file stream and copy the image data
+                        using (var stream = new FileStream(fn, FileMode.Create))
+                        {
+                            MainImage.CopyTo(stream);
+                        }
+                    }
+                    if (GalleryImages != null)
+                    {
+                        foreach (var item in GalleryImages)
+                        {
+                            var imageName = Guid.NewGuid() + Path.GetExtension(item.FileName);
+                            string d = Directory.GetCurrentDirectory();
+                            string fn = d + "\\wwwroot\\images\\banners\\" + imageName;
+
+                            using (var stream = new FileStream(fn, FileMode.Create))
+                            {
+                                item.CopyTo(stream);
+                            }
+
+                            var galleryItem = new ProductGalery();
+                            galleryItem.ImageName = imageName;
+                            galleryItem.ProductId = product.Id;
+
+                            _context.ProductGaleries.Add(galleryItem);
+                        }
+                    }
                     _context.Update(product);
                     await _context.SaveChangesAsync();
                 }
@@ -174,6 +213,32 @@ namespace OnlineShop.Areas.Admin.Controllers
 
             return View(product);
         }
+        public IActionResult DeleteGallery(int id)
+        {
+            // Find the gallery item in the database
+            var gallery = _context.ProductGaleries.FirstOrDefault(x => x.Id == id);
+            if (gallery == null)
+            {
+                return NotFound();
+            }
+
+            // Get the current directory and construct the file path
+            string d = Directory.GetCurrentDirectory();
+            string fn = d + "\\wwwroot\\images\\banners\\" + gallery.ImageName;
+
+            // Check if the file exists and delete it
+            if (System.IO.File.Exists(fn))
+            {
+                System.IO.File.Delete(fn);
+            }
+
+            // Remove the gallery item from the database and save changes
+            _context.Remove(gallery);
+            _context.SaveChanges();
+
+            // Redirect to the edit page of the product
+            return Redirect("edit/" + gallery.ProductId);
+        }
 
         // POST: Admin/Products/Delete/5
         [HttpPost, ActionName("Delete")]
@@ -183,6 +248,32 @@ namespace OnlineShop.Areas.Admin.Controllers
             var product = await _context.Products.FindAsync(id);
             if (product != null)
             {
+                // ======= Delete images =======
+                string d = Directory.GetCurrentDirectory();
+                string fn = d + "\\wwwroot\\images\\banners\\";
+
+                // Delete the main image
+                string mainImagePath = fn + product.ImageName;
+                if (System.IO.File.Exists(mainImagePath))
+                {
+                    System.IO.File.Delete(mainImagePath);
+                }
+
+                // Retrieve and delete gallery images
+                var galleries = _context.ProductGaleries.Where(x => x.ProductId == id).ToList();
+                if (galleries != null)
+                {
+                    foreach (var item in galleries)
+                    {
+                        string galleryImagePath = fn + item.ImageName;
+                        if (System.IO.File.Exists(galleryImagePath))
+                        {
+                            System.IO.File.Delete(galleryImagePath);
+                        }
+                    }
+                    _context.ProductGaleries.RemoveRange(galleries);
+                }
+
                 _context.Products.Remove(product);
             }
 
