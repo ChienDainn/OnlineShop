@@ -215,9 +215,10 @@
                                                 discount_percentage = (item.Discount.GetValueOrDefault(0) / item.Price.GetValueOrDefault(0)) * 100;
                                             }
                                             <span>
-                                                @discount_percentage.GetValueOrDefault(0)%
+                                                @Math.Round(discount_percentage.GetValueOrDefault(0), 0)%
                                             </span>
                                         </div>
+
                                     }
 
                                    @*  <div class="product_action">
@@ -234,39 +235,61 @@
                                             </li>
                                         </ul>
                                     </div> *@
-                                    <div class="product_label">
-                                        <span>-18%</span>
-                                    </div>
+                                    
                                 </div>
                                 <div class="product_content grid_content text-center">
-                                    <div class="product_ratting">
-                                        <ul class="d-flex justify-content-center">
-                                            <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                            <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                            <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                            <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                            <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                            <li><span>(2)</span></li>
-                                        </ul>
-                                    </div>
-                                    <h4 class="product_name"><a href="product-details.html">Basic White Simple Sneaker</a></h4>
+                                   
+                                    <h4 class="product_name"><a href="product-details.html">@item.Title</a></h4>
                                     <div class="price_box">
-                                        <span class="current_price">$43.00</span>
-                                        <span class="old_price">$46.00</span>
+                                        @if (item.Discount != null)
+                                        {
+                                            <span class="current_price">
+                                                @{
+                                                    decimal? discounted_price;
+                                                    discounted_price = item.Price.GetValueOrDefault(0) - item.Discount.GetValueOrDefault(0);
+                                                }
+                                                $@discounted_price.GetValueOrDefault(0).ToString("F")
+                                            </span>
+                                            <span class="old_price">
+                                                $@item.Price.GetValueOrDefault(0).ToString("F")
+                                            </span>
+
+                                        }
+                                        else
+                                        {
+                                            <span class="current_price">$@item.Price.GetValueOrDefault(0)ToString("F")</span>
+                                        }
+                                      
                                     </div>
                                     <div class="add_to_cart">
                                         <a class="btn btn-primary" href="#" data-tippy="Add To Cart" data-tippy-inertia="true" data-tippy-delay="50" data-tippy-arrow="true" data-tippy-placement="top">Add To Cart</a>
                                     </div>
                                 </div>
                                 <div class="product_list_content">
-                                    <h4 class="product_name"><a href="product-details.html">Basic White Simple Sneaker</a></h4>
+                                    <h4 class="product_name"><a href="product-details.html">@item.Title</a></h4>
                                     <p><a href="#">shows</a></p>
                                     <div class="price_box">
-                                        <span class="current_price">$43.00</span>
-                                        <span class="old_price">$46.00</span>
+                                        @if (item.Discount != null)
+                                        {
+                                            <span class="current_price">
+                                                @{
+                                                    decimal? discounted_price;
+                                                    discounted_price = item.Price.GetValueOrDefault(0) - item.Discount.GetValueOrDefault(0);
+                                                }
+                                                $@discounted_price.GetValueOrDefault(0).ToString("F")
+                                            </span>
+                                            <span class="old_price">
+                                                $@item.Price.GetValueOrDefault(0).ToString("F")
+                                            </span>
+
+                                        }
+                                        else
+                                        {
+                                            <span class="current_price">$@item.Price.GetValueOrDefault(0)ToString("F")</span>
+                                        }
                                     </div>
                                     <div class="product_desc">
-                                        <p>Nunc facilisis sagittis ullamcorper. Proin lectus ipsum, gravida et mattis vulputate, tristique ut lectus. Sed et lorem nunc. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aenean eleifend laoreet congue. Viva..</p>
+                                        <p>@item.Description</p>
                                     </div>
                                     <div class="add_to_cart">
                                         <a class="btn btn-primary" href="#" data-tippy="Add To Cart" data-tippy-inertia="true" data-tippy-delay="50" data-tippy-arrow="true" data-tippy-placement="top">Add To Cart</a>

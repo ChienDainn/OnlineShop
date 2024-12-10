@@ -54,12 +54,14 @@
             <td>
                 @Html.DisplayFor(modelItem => item.FullDesc)
             </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Price)
+                @Html.DisplayFor(modelItem => item.Discount)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
+            
+               
             <td>
                 @* @Html.DisplayFor(modelItem => item.ImageName) *@
                 <img src="/images/banners/@item.ImageName" style="max-width:100px" />
