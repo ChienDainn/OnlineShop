@@ -207,6 +207,19 @@
                                     <a href="product-details.html">
                                         <img class="primary_img" src="/images/banners/@item.ImageName" alt="@item.ImageName">
                                     </a>
+                                    @if (item.Discount != null && item.Price > 0)
+                                    {
+                                        <div class="product_label">
+                                            @{
+                                                decimal? discount_percentage;
+                                                discount_percentage = (item.Discount.GetValueOrDefault(0) / item.Price.GetValueOrDefault(0)) * 100;
+                                            }
+                                            <span>
+                                                @discount_percentage.GetValueOrDefault(0)%
+                                            </span>
+                                        </div>
+                                    }
+
                                    @*  <div class="product_action">
                                         <ul>
                                             <li class="wishlist">
