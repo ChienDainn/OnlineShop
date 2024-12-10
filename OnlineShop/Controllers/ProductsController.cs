@@ -25,5 +25,20 @@ namespace OnlineShop.Controllers
 
             return View("Index",products);
         }
+
+        public IActionResult ProductDetails(int id)
+        {
+            Product? product = _context.Products.FirstOrDefault(x => x.Id == id);
+            //-------
+            if (product == null)
+            {
+                return NotFound();
+            }
+           
+            //-------
+            ViewData["gallery"] = _context.ProductGaleries.Where(x => x.ProductId == id).ToList();
+            return View(product);
+           
+        }
     }
 }
