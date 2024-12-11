@@ -10,15 +10,15 @@
 
 
 <!--breadcrumbs area start-->
-<div class="breadcrumbs_area breadcrumbs_product">
+<div class="breadcrumbs_area breadcrumbs_product mt-5">
     <div class="container">
         <div class="row">
             <div class="col-12">
                 <div class="breadcrumb_content">
                     <ul>
-                        <li><a href="index.html">home</a></li>
-                        <li><a href="shop.html">shop</a></li>
-                        <li>Product Example</li>
+                        <li><a href="/">home</a></li>
+                        <li><a href="/products">shop</a></li>
+                        <li>@Model.Title</li>
                     </ul>
                 </div>
             </div>
@@ -34,40 +34,35 @@
                 <div class="product_zoom_gallery">
                     <div class="zoom_gallery_inner d-flex">
                         <div class="zoom_tab_img">
-                            <a class="zoom_tabimg_list" href="javascript:void(0)"><img src="assets/img/product/small-product/product1.png" alt="tab-thumb"></a>
-                            <a class="zoom_tabimg_list" href="javascript:void(0)"><img src="assets/img/product/small-product/product2.png" alt="tab-thumb"></a>
-                            <a class="zoom_tabimg_list" href="javascript:void(0)"><img src="assets/img/product/small-product/product3.png" alt="tab-thumb"></a>
-                            <a class="zoom_tabimg_list" href="javascript:void(0)"><img src="assets/img/product/small-product/product4.png" alt="tab-thumb"></a>
-                            <a class="zoom_tabimg_list" href="javascript:void(0)"><img src="assets/img/product/small-product/product1.png" alt="tab-thumb"></a>
-                            <a class="zoom_tabimg_list" href="javascript:void(0)"><img src="assets/img/product/small-product/product2.png" alt="tab-thumb"></a>
-                            <a class="zoom_tabimg_list" href="javascript:void(0)"><img src="assets/img/product/small-product/product3.png" alt="tab-thumb"></a>
-                            <a class="zoom_tabimg_list" href="javascript:void(0)"><img src="assets/img/product/small-product/product4.png" alt="tab-thumb"></a>
+                            <a class="zoom_tabing_list" href="javascript:void(0)">
+                                <img src="/images/banners/@Model.ImageName" alt="@Model.ImageName">
+                            </a>
+                            @if (gallery.Any())
+                            {
+                                @foreach (var item in gallery.OrderBy(x => x.Id))
+                                {
+                                    <a class="zoom_tabing_list" href="javascript:void(0)">
+                                        <img src="/images/banners/@item.ImageName" alt="@item.ImageName">
+                                    </a>
+                                }
+                            }
+
                         </div>
                         <div class="product_zoom_main_img">
                             <div class="product_zoom_thumb">
-                                <img data-image="assets/img/product/big-product/product1.png" src="assets/img/product/big-product/product1.png" alt="">
+                                <img data-image="/images/banners/@Model.ImageName" src="/images/banners/@Model.ImageName" alt="@Model.ImageName">
                             </div>
-                            <div class="product_zoom_thumb">
-                                <img data-image="assets/img/product/big-product/product1.png" src="assets/img/product/big-product/product1.png" alt="">
-                            </div>
-                            <div class="product_zoom_thumb">
-                                <img data-image="assets/img/product/big-product/product1.png" src="assets/img/product/big-product/product1.png" alt="">
-                            </div>
-                            <div class="product_zoom_thumb">
-                                <img data-image="assets/img/product/big-product/product1.png" src="assets/img/product/big-product/product1.png" alt="">
-                            </div>
-                            <div class="product_zoom_thumb">
-                                <img data-image="assets/img/product/big-product/product1.png" src="assets/img/product/big-product/product1.png" alt="">
-                            </div>
-                            <div class="product_zoom_thumb">
-                                <img data-image="assets/img/product/big-product/product1.png" src="assets/img/product/big-product/product1.png" alt="">
-                            </div>
-                            <div class="product_zoom_thumb">
-                                <img data-image="assets/img/product/big-product/product1.png" src="assets/img/product/big-product/product1.png" alt="">
-                            </div>
-                            <div class="product_zoom_thumb">
-                                <img data-image="assets/img/product/big-product/product1.png" src="assets/img/product/big-product/product1.png" alt="">
-                            </div>
+                            @if (gallery.Any())
+                            {
+                                @foreach (var item in gallery.OrderBy(x => x.Id))
+                                {
+                                    <div class="product_zoom_thumb">
+                                        <img data-image="/images/banners/@item.ImageName" src="/images/banners/@item.ImageName" alt="@item.ImageName">
+                                    </div>
+                                }
+                            }
+                           
+                          
                         </div>
                     </div>
                 </div>
