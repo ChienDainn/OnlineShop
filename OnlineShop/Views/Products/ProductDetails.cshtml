@@ -50,7 +50,9 @@
                         </div>
                         <div class="product_zoom_main_img">
                             <div class="product_zoom_thumb">
-                                <img data-image="/images/banners/@Model.ImageName" src="/images/banners/@Model.ImageName" alt="@Model.ImageName">
+                                <img width: 490px;
+                                     height: 590px;
+                                     object-fit: cover;data-image="/images/banners/@Model.ImageName" src="/images/banners/@Model.ImageName" alt="@Model.ImageName">
                             </div>
                             @if (gallery.Any())
                             {
@@ -70,9 +72,9 @@
             <div class="col-lg-6 col-md-6">
                 <div class="product_d_right">
                     <form action="#">
-                        <h1>Edwin T-Shirt Logo Script Print in Navy</h1>
+                        <h1>@Model.Title</h1>
                         <div class="product_ratting_review d-flex align-items-center">
-                            <div class=" product_ratting">
+                            @* <div class=" product_ratting">
                                 <ul class="d-flex">
                                     <li><a href="#"><i class="ion-ios-star"></i></a></li>
                                     <li><a href="#"><i class="ion-ios-star"></i></a></li>
@@ -80,7 +82,7 @@
                                     <li><a href="#"><i class="ion-ios-star"></i></a></li>
                                     <li><a href="#"><i class="ion-ios-star"></i></a></li>
                                 </ul>
-                            </div>
+                            </div> *@
                             <div class="product_review">
                                 <ul class="d-flex">
                                     <li>4 reviews</li>
@@ -89,19 +91,50 @@
                             </div>
                         </div>
                         <div class="price_box">
-                            <span class="current_price">$39.00</span>
+                            <span class="current_price">
+                                @if (@Model.Discount != null)
+                                {
+                                    <span class="current_price">
+                                        @{
+                                            decimal? discounted_price;
+                                            discounted_price = @Model.Price.GetValueOrDefault(0) - @Model.Discount.GetValueOrDefault(0);
+                                        }
+                                        $@discounted_price.GetValueOrDefault(0).ToString("F")
+                                    </span>
+                                    <span class="old_price">
+                                        $@Model.Price.GetValueOrDefault(0).ToString("F")
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="current_price">
+                                        $@Model.Price.GetValueOrDefault(0).ToString("F")
+                                    </span>
+                                }
+
+                            </span>
                         </div>
                         <div class="product_availalbe">
                             <ul class="d-flex">
-                                <li><i class="icon-layers icons"></i> Only <span>15</span> left </li>
-                                <li>Availalbe: <span class="stock">In Stock</span></li>
+                                <li><i class="icon-layers icons"></i> Only <span>@Model.Qty</span> left </li>
+                                <li>
+                                    Availalbe:@if (Model.Qty > 0)
+                                    {
+                                        <span class="stock">In Stock</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-danger">Out of Stock</span>
+                                    }
+                                    
+                                </li>
                             </ul>
                         </div>
                         <div class="product_desc">
-                            <p>A t-shirt that comes in three colors (red, white and blue) and three sizes (small, medium, large) is a configurable product.  </p>
+                            <p> @Model.Description </p>
                         </div>
                         <div class="product_variant">
-                            <div class="filter__list widget_color d-flex align-items-center">
+                          @*   <div class="filter__list widget_color d-flex align-items-center">
                                 <h3>select color</h3>
                                 <ul>
                                     <li>
@@ -141,26 +174,40 @@
                                         <a href="javascript:void(0)">XLL</a>
                                     </li>
                                 </ul>
-                            </div>
+                            </div> *@
 
                             <div class="variant_quantity_btn d-flex">
-                                <div class="pro-qty border">
-                                    <input min="1" max="100" type="tex" value="1">
-                                </div>
-                                <button class="button btn btn-primary" type="submit"><i class="ion-android-add"></i> Add To Cart</button>
-                                <a class="wishlist" href="#"><i class="ion-ios-heart"></i></a>
+                                @if(Model.Qty>0){
+                                    <div class="pro-qty border">
+                                        <input min="1" max="100" type="text" value="1">
+                                    </div>
+                                        <button class="button btn btn-primary" type="submit"><i class="ion-android-add"></i> Add To Cart</button>
+                                  
+                                }
+                               
+                               
+                                @* <a class="wishlist" href="#"><i class="ion-ios-heart"></i></a> *@
                             </div>
                         </div>
                         <div class="product_sku">
-                            <p><span>SKU: </span> #ABC123456</p>
+                            <p><span>SKU: </span> PRI#@Model.Id</p>
                         </div>
                         <div class="product_tags d-flex">
-                            <span>tags: </span>
-                            <ul class="d-flex">
-                                <li><a href="#">fashion,</a></li>
-                                <li><a href="#">clothings,</a></li>
-                                <li><a href="#">accessorires</a></li>
-                            </ul>
+                            @if (!string.IsNullOrEmpty(Model.Tags))
+                            {
+                                var tags = Model.Tags.Split(',');
+                                <span>Tags: </span>
+                                <ul class="d-flex">
+                                    @foreach (var item in tags)
+                                    {
+                                        <li>
+                                            <a href="/products/SearchProducts?SearchText=@item">@item</a>,
+                                            </li>
+                                    }
+                                </ul>
+                            }
+
+                            
                         </div>
                         <div class="priduct_social d-flex">
                             <span>SHARE: </span>
@@ -196,12 +243,7 @@
                             <li>
                                 <a data-toggle="tab" href="#tags" role="tab" aria-controls="tags" aria-selected="false">Tags </a>
                             </li>
-                            <li>
-                                <a data-toggle="tab" href="#additional" role="tab" aria-controls="additional" aria-selected="false">Additional Information </a>
-                            </li>
-                            <li>
-                                <a data-toggle="tab" href="#tabinfo" role="tab" aria-controls="tabinfo" aria-selected="false">Custom Tab Info  </a>
-                            </li>
+                           
                             <li>
                                 <a data-toggle="tab" href="#video" role="tab" aria-controls="video" aria-selected="false">Custom Tab Video </a>
                             </li>
@@ -211,15 +253,7 @@
                     <div class="tab-content">
                         <div class="tab-pane fade show active" id="info" role="tabpanel">
                             <div class="product_info_content">
-                                <p>Coupling a blended linen construction with tailored style, the River Island HR Jasper Blazer will imprint a touch of dapper charm into your after-dark wardrobe. <br> Our model wearing a size medium blazer, and usually takes a size medium/38L shirt. <br> He is 6’2 1/2” (189cm) tall with a 38” (96 cm) chest and a 31” (78 cm) waist.</p>
-                                <ul>
-                                    <li>Length: 74cm</li>
-                                    <li>Regular fit</li>
-                                    <li>Notched lapels</li>
-                                    <li>Twin button front fastening</li>
-                                    <li>Front patch pockets; chest pocket</li>
-                                    <li> Internal pockets</li>
-                                </ul>
+                                 @Html.Raw(Model.FullDesc.Replace("\n","<br>"))
                             </div>
                         </div>
                         <div class="tab-pane fade" id="reviews" role="tabpanel">
@@ -285,12 +319,22 @@
                         <div class="tab-pane fade" id="tags" role="tabpanel">
                             <div class="product_info_content">
                                 <ul>
-                                    <li>Length: 74cm</li>
-                                    <li>Regular fit</li>
-                                    <li>Notched lapels</li>
-                                    <li>Twin button front fastening</li>
-                                    <li>Front patch pockets; chest pocket</li>
-                                    <li> Internal pockets</li>
+                                   
+                                 
+                                        @if (!string.IsNullOrEmpty(Model.Tags))
+                                        {
+                                            var tags = Model.Tags.Split(",");
+                                          
+                                                @foreach (var item in tags)
+                                                {
+                                                    <li>
+                                                       @item
+                                                    </li>
+                                                }
+                                            
+                                        }
+                                  
+
                                 </ul>
                             </div>
                         </div>
@@ -346,7 +390,7 @@
                         </div>
                         <div class="tab-pane fade" id="video" role="tabpanel">
                             <div class="product_tab_vidio text-center">
-                                <iframe width="729" height="410" src="https://www.youtube.com/embed/BUWzX78Ye_8" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                <iframe width="729" height="410" src="@Model.VideoUrl" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                             </div>
                         </div>
 
