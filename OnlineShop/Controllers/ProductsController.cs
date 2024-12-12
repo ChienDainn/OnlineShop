@@ -34,9 +34,10 @@ namespace OnlineShop.Controllers
             {
                 return NotFound();
             }
-           
-            //-------
             ViewData["gallery"] = _context.ProductGaleries.Where(x => x.ProductId == id).ToList();
+            //-------
+            ViewData["NewProducts"] = _context.Products.Where(x => x.Id! == id).
+                Take(6).OrderByDescending(x => x.Id).ToList();
             return View(product);
            
         }
