@@ -17,6 +17,8 @@ public partial class OnlineShopContext : DbContext
 
     public virtual DbSet<Banner> Banners { get; set; }
 
+    public virtual DbSet<Comment> Comments { get; set; }
+
     public virtual DbSet<Menu> Menus { get; set; }
 
     public virtual DbSet<Product> Products { get; set; }
@@ -43,6 +45,16 @@ public partial class OnlineShopContext : DbContext
             entity.Property(e => e.Title).HasMaxLength(200);
         });
 
+        modelBuilder.Entity<Comment>(entity =>
+        {
+            entity.ToTable("Comment");
+
+            entity.Property(e => e.CommentText).HasMaxLength(1000);
+            entity.Property(e => e.CreateDate).HasColumnType("datetime");
+            entity.Property(e => e.Email).HasMaxLength(50);
+            entity.Property(e => e.Name).HasMaxLength(50);
+        });
+
         modelBuilder.Entity<Menu>(entity =>
         {
             entity.Property(e => e.Id).HasColumnName("ID");
@@ -55,6 +67,8 @@ public partial class OnlineShopContext : DbContext
 
         modelBuilder.Entity<Product>(entity =>
         {
+            entity.HasKey(e => e.Id).HasName("PK__Products__3214EC071FBF2FCA");
+
             entity.Property(e => e.Description).HasMaxLength(500);
             entity.Property(e => e.Discount).HasColumnType("money");
             entity.Property(e => e.FullDesc).HasMaxLength(4000);
@@ -67,6 +81,8 @@ public partial class OnlineShopContext : DbContext
 
         modelBuilder.Entity<ProductGalery>(entity =>
         {
+            entity.HasKey(e => e.Id).HasName("PK__ProductG__3214EC0719EB9BBE");
+
             entity.ToTable("ProductGalery");
 
             entity.Property(e => e.ImageName).HasMaxLength(50);

@@ -2,15 +2,20 @@
 @{
     List<OnlineShop.Models.Db.ProductGalery>? gallery = new List<ProductGalery>();
     List<Product> NewProducts = new List<Product>();
+    List<Comment> comments = new List<Comment>();
     //ViewData["NewProducts"]
     if (ViewData["NewProducts"] != null)
     {
-        NewProducts = ViewData["NewProducts"] as List<Product>;
+        NewProducts = ViewData["NewProducts"] as List<Product> ?? new List<Product>();
     }
     if (ViewData["gallery"] != null)
     {
         gallery = ViewData["gallery"] as List<ProductGalery>;
     }
+     if (ViewData["comments"] != null)
+     {
+         comments = ViewData["comments"] as List<Comment>;
+     }
 
 }
 
@@ -43,7 +48,7 @@
                             <a class="zoom_tabing_list" href="javascript:void(0)">
                                 <img src="/images/banners/@Model.ImageName" alt="@Model.ImageName">
                             </a>
-                            @if (gallery.Any())
+                            @if (gallery != null && gallery.Any())
                             {
                                 @foreach (var item in gallery.OrderBy(x => x.Id))
                                 {
@@ -60,7 +65,7 @@
                                 height: 590px;
                                 object-fit: cover;data-image="/images/banners/@Model.ImageName" src="/images/banners/@Model.ImageName" alt="@Model.ImageName">
                             </div>
-                            @if (gallery.Any())
+                            @if (gallery != null && gallery.Any())
                             {
                                 @foreach (var item in gallery.OrderBy(x => x.Id))
                                 {
@@ -91,7 +96,7 @@
                             </div> *@
                             <div class="product_review">
                                 <ul class="d-flex">
-                                    <li>4 reviews</li>
+                                      <li>@comments.Count Reviews</li>
                                     <li>Write your review</li>
                                 </ul>
                             </div>
@@ -259,33 +264,36 @@
                     <div class="tab-content">
                         <div class="tab-pane fade show active" id="info" role="tabpanel">
                             <div class="product_info_content">
-                                @Html.Raw(Model.FullDesc.Replace("\n","<br>"))
+                                @Html.Raw((Model.FullDesc ?? "").Replace("\n", "<br>"))
                             </div>
                         </div>
                         <div class="tab-pane fade" id="reviews" role="tabpanel">
                             <div class="reviews_wrapper">
-                                <h2>1 review for Donec eu furniture</h2>
-                                <div class="reviews_comment_box">
-                                    <div class="comment_thmb">
-                                        <img src="assets/img/blog/comment2.jpg" alt="">
-                                    </div>
-                                    <div class="comment_text">
-                                        <div class="reviews_meta">
-                                            <div class="star_rating">
-                                                <ul class="d-flex">
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                    <li><a href="#"><i class="icon-star"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <p><strong>admin </strong>- September 12, 2018</p>
-                                            <span>roadthemes</span>
+                                ///// <h2>@(comments?.Count ?? 0) review for @Model.Title </h2>
+                                @foreach (var item in comments)
+                                {
+                                
+                                    <div class="reviews_comment_box">
+                                        <div class="comment_thmb">
+                                            <img src="assets/img/blog/comment1.jpg" alt="">
                                         </div>
+                                        <div class="comment_text">
+                                            <div class="reviews_meta">
+                                               @*  <div class="star_rating">
+                                                    <ul class="d-flex">
+                                                        <li><a href="#"><i class="icon-star"></i></a></li>
+                                                        <li><a href="#"><i class="icon-star"></i></a></li>
+                                                        <li><a href="#"><i class="icon-star"></i></a></li>
+                                                        <li><a href="#"><i class="icon-star"></i></a></li>
+                                                        <li><a href="#"><i class="icon-star"></i></a></li>
+                                                    </ul>
+                                                </div> *@
+                                                <p><strong>@item.Name </strong>- @item.CreateDate</p>
+                                                <span>@item.CommentText</span>                              
+                                        </div>
+                                        </div>                                 
                                     </div>
-
-                                </div>
+                                }
                                 <div class="comment_title">
                                     <h2>Add a review </h2>
                                     <p>Your email address will not be published.  Required fields are marked </p>
@@ -301,7 +309,8 @@
                                     </ul>
                                 </div>
                                 <div class="product_review_form">
-                                    <form action="#">
+                                    <form method="post" asp-action="SubmitComment" asp-asp-controller="Products">
+                                    <input type="hidden" name="ProductId" value="@Model.Id" />
                                         <div class="row">
                                             <div class="col-12">
                                                 <label for="review_comment">Your review </label>
@@ -309,14 +318,26 @@
                                             </div>
                                             <div class="col-lg-6 col-md-6">
                                                 <label for="author">Name</label>
-                                                <input id="author" type="text">
+                                                <input name="name" id="author" type="text">
 
                                             </div>
                                             <div class="col-lg-6 col-md-6">
                                                 <label for="email">Email </label>
-                                                <input id="email" type="text">
+                                                <input name="email" id="email" type="text">
                                             </div>
                                         </div>
+                                        @if (TempData["SuccessMessage"] != null)
+                                        {
+                                            <div class="alert alert-success" role="alert">
+                                                @TempData["SuccessMessage"]
+                                            </div>
+                                        }
+                                        @if (TempData["ErrorMessage"] != null)
+                                        {
+                                            <div class="alert alert-danger" role="alert">
+                                                @TempData["ErrorMessage"]
+                                            </div>
+                                        }
                                         <button type="submit">Submit</button>
                                     </form>
                                 </div>

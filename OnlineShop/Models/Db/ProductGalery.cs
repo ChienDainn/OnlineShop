@@ -9,5 +9,5 @@ public partial class ProductGalery
 
     public int ProductId { get; set; }
 
-    public string? ImageName { get; set; }
+    public string ImageName { get; set; } = null!;
 }
