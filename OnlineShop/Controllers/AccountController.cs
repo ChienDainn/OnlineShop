@@ -21,9 +21,9 @@ namespace OnlineShop.Controllers
             user.RegisterDate = DateTime.Now;
             user.IsAdmin = false;
 
-            user.Email = user.Email.Trim();
-            user.Password = user.Password.Trim();
-            user.FullName = user.FullName.Trim();
+            user.Email = user.Email?.Trim();
+            user.Password = user.Password?.Trim();
+            user.FullName = user.FullName?.Trim();
 
             user.RecoveryCode = 0;
 
