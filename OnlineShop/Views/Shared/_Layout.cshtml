@@ -209,11 +209,20 @@
                                 <ul class="d-flex">
                                     <li class="header_search"><a href="#"><i class="icon-magnifier icons"></i></a></li>
                                     <li class="account_link">
-                                        <a href="#"><i class="icon-user icons"></i></a>
+                                        <a href="#"><i class="icon-user icons @(User.Identity.IsAuthenticated?"text-danger":"")"></i></a>
                                         <ul class="dropdown_account_link">
+                                            @if(User.Identity.IsAuthenticated)
+                                            {
                                             <li><a href="#">My Account</a></li>
-                                            <li><a href="#">Login</a></li>
-                                            <li><a href="#">Contact</a></li>
+                                            <li><a href="#">Order List</a></li>
+                                            <li><a href="/account/logout">Logout</a></li>
+                                            }
+                                            else
+                                            {
+                                                 <li><a href="/account/login">Login</a></li>
+                                                <li><a href="/account/register">Register</a></li>
+                                            }
+                                           
                                         </ul>
                                     </li>
                                     <li>
