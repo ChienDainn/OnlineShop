@@ -6,6 +6,7 @@ using OnlineShop.Models.ViewModels;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Authorization;
+using System.Net.Mail;
 
 namespace OnlineShop.Controllers
 {
@@ -123,6 +124,91 @@ namespace OnlineShop.Controllers
             return RedirectToAction("Login", "Account");
         }
 
+        public IActionResult RecoveryPassword()
+        {
+            return View();
+        }
 
+        [HttpPost]
+        public IActionResult RecoveryPassword(RecoveryPasswordViewModel recoveryPassword)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            ///===========================================///
+
+            Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
+            Match match = regex.Match(recoveryPassword.Email);
+            if (!match.Success)
+            {
+                ModelState.AddModelError("Email", "Email is not valid");
+                return View(recoveryPassword);
+            }
+
+            ///===========================================///
+
+            var foundUser = _context.Users.FirstOrDefault(x => x.Email == recoveryPassword.Email.Trim());
+            if (foundUser == null)
+            {
+                ModelState.AddModelError("Email", "Email not exist");
+                return View(recoveryPassword);
+            }
+
+            ///===========================================///
+            foundUser.RecoveryCode = new Random().Next(10000, 100000);
+            _context.Users.Update(foundUser);
+            _context.SaveChanges();
+            //---------------------------
+            MailMessage mail = new MailMessage();
+            SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
+
+            mail.From = new MailAddress("emailsendertest0055@gmail.com");
+            mail.To.Add(foundUser.Email);
+            mail.Subject = "Recovery code";
+            mail.Body = "Hello User, Your recovery code: " + foundUser.RecoveryCode;
+
+            SmtpServer.Port = 587;
+            SmtpServer.Credentials = new System.Net.NetworkCredential("cuutrang0106@gmail.com", "wnqh jopf jokf tahv");
+            SmtpServer.EnableSsl = true;
+
+            SmtpServer.Send(mail);
+
+            ///-------------------------------------------///
+            return Redirect("/Account/ResetPassword?email=" + foundUser.Email);
+
+        }
+
+        public IActionResult ResetPassword(string email)
+        {
+            var resetPasswordModel = new ResetPasswordViewModel();
+            resetPasswordModel.Email = email;
+
+            return View(resetPasswordModel);
+        }
+        [HttpPost]
+        public IActionResult ResetPassword(ResetPasswordViewModel resetPassword)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(resetPassword);
+            }
+            //------------------
+            var foundUser = _context.Users.FirstOrDefault(x => x.Email == resetPassword.Email && x.RecoveryCode == resetPassword.RecoveryCode);
+
+            if (foundUser == null)
+            {
+                ModelState.AddModelError("RecoveryCode", "Email or Recovery Code is not valid");
+                return View(resetPassword);
+            }
+
+            //------------------
+            foundUser.Password = resetPassword.NewPassword;
+            _context.Users.Update(foundUser);
+            _context.SaveChanges();
+            //------------------
+            return RedirectToAction("Login");
+        }
     }
 }
