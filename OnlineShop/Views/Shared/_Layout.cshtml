@@ -355,15 +355,15 @@
     <!-- Main JS -->
     <script src="/assets/js/main.js"></script>
     <script>
-                function updateCart(productId, count) {
+             function updateCart(productId, count) {
             $.ajax({
                 url: '/Cart/UpdateCart', // Đường dẫn đến controller/action xử lý cập nhật giỏ hàng
                 type: 'POST', // Phương thức HTTP sử dụng để gửi dữ liệu
                 contentType: 'application/json', // Định dạng dữ liệu gửi lên server
                 data: JSON.stringify({ productId: productId, count: count }), // Dữ liệu gửi lên gồm ID sản phẩm và số lượng
-                success: function(result) {
+                success: function (result) {
                     // Cập nhật số lượng sản phẩm trong giỏ hàng trên giao diện
-                    $("#item_count").html(result);
+                    $(".item_count").html(result);
                     // Gọi hàm để cập nhật lại phần giỏ hàng nhỏ
                     getMiniCart();
                 },
@@ -373,6 +373,22 @@
                 }
             });
         }
+                function getMiniCart() {
+            $.ajax({
+                url: '/Cart/SmallCart',
+                type: 'GET',
+                success: function (result) {
+                    $(".mini_cart").html(result);
+                },
+                error: function () {
+                    console.error('Error fetching mini cart');
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            getMiniCart();
+        });
     </script>
 
 
