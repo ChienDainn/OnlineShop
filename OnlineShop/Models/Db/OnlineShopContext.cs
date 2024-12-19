@@ -19,11 +19,21 @@ public partial class OnlineShopContext : DbContext
 
     public virtual DbSet<Comment> Comments { get; set; }
 
+    public virtual DbSet<Coupon> Coupons { get; set; }
+
     public virtual DbSet<Menu> Menus { get; set; }
+
+    public virtual DbSet<Order> Orders { get; set; }
+
+    public virtual DbSet<OrderDetail> OrderDetails { get; set; }
 
     public virtual DbSet<Product> Products { get; set; }
 
     public virtual DbSet<ProductGalery> ProductGaleries { get; set; }
+
+    public virtual DbSet<Setting> Settings { get; set; }
+
+    public virtual DbSet<Shipping> Shippings { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
@@ -57,6 +67,16 @@ public partial class OnlineShopContext : DbContext
             entity.Property(e => e.Name).HasMaxLength(50);
         });
 
+        modelBuilder.Entity<Coupon>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_dbo.Coupon");
+
+            entity.ToTable("Coupon");
+
+            entity.Property(e => e.Code).HasMaxLength(50);
+            entity.Property(e => e.Discount).HasColumnType("money");
+        });
+
         modelBuilder.Entity<Menu>(entity =>
         {
             entity.Property(e => e.Id).HasColumnName("ID");
@@ -65,6 +85,35 @@ public partial class OnlineShopContext : DbContext
             entity.Property(e => e.Type)
                 .HasMaxLength(10)
                 .IsFixedLength();
+        });
+
+        modelBuilder.Entity<Order>(entity =>
+        {
+            entity.ToTable("Order");
+
+            entity.Property(e => e.Address).HasMaxLength(200);
+            entity.Property(e => e.City).HasMaxLength(50);
+            entity.Property(e => e.Comment).HasMaxLength(200);
+            entity.Property(e => e.CompanyName).HasMaxLength(50);
+            entity.Property(e => e.Country).HasMaxLength(50);
+            entity.Property(e => e.CouponCode).HasMaxLength(50);
+            entity.Property(e => e.CouponDiscount).HasColumnType("money");
+            entity.Property(e => e.CreateDate).HasColumnType("datetime");
+            entity.Property(e => e.Email).HasMaxLength(50);
+            entity.Property(e => e.FirstName).HasMaxLength(50);
+            entity.Property(e => e.LastName).HasMaxLength(50);
+            entity.Property(e => e.Phone).HasMaxLength(50);
+            entity.Property(e => e.Shipping).HasColumnType("money");
+            entity.Property(e => e.Status).HasMaxLength(50);
+            entity.Property(e => e.SubTotal).HasColumnType("money");
+            entity.Property(e => e.Total).HasColumnType("money");
+            entity.Property(e => e.TransId).HasMaxLength(200);
+        });
+
+        modelBuilder.Entity<OrderDetail>(entity =>
+        {
+            entity.Property(e => e.ProductPrice).HasColumnType("money");
+            entity.Property(e => e.ProductTitle).HasMaxLength(200);
         });
 
         modelBuilder.Entity<Product>(entity =>
@@ -88,6 +137,22 @@ public partial class OnlineShopContext : DbContext
             entity.ToTable("ProductGalery");
 
             entity.Property(e => e.ImageName).HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<Setting>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_Setting");
+
+            entity.Property(e => e.Shipping).HasColumnType("money");
+        });
+
+        modelBuilder.Entity<Shipping>(entity =>
+        {
+            entity.ToTable("Shipping");
+
+            entity.Property(e => e.Shipping1)
+                .HasColumnType("money")
+                .HasColumnName("Shipping");
         });
 
         modelBuilder.Entity<User>(entity =>
